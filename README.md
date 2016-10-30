@@ -8,7 +8,7 @@ go version go1.6.3 linux/amd64
 
 ## OptionTest
 
-Add OptionTest
+add OptionTest
 
 
 ## fix-B
