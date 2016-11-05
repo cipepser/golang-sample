@@ -3,35 +3,79 @@ import(
 	"fmt"
 )
 
-
-type Task struct {
-	ID int
-	Detail string
-	done bool
-}
+// type Task struct {
+// 	ID int
+// 	Detail string
+// 	done bool
+// }
 
 // func Finish(task *Task) {
 // 	task.done = true
 // }
 
 // コンストラクタ
-func NewTask(id int, detail string) *Task {
-	task := &Task {
-		ID: id,
-		Detail: detail,
-		done: false,
-	}
-	return task
-}
+// func NewTask(id int, detail string) *Task {
+// 	task := &Task {
+// 		ID: id,
+// 		Detail: detail,
+// 		done: false,
+// 	}
+// 	return task
+// }
 
 // メソッド
 // func (task Task) String() string {
 //     str := fmt.Sprintf("%d) %s\n", task.ID, task.Detail)
 //     return str
 // }
+// 
+// func (task *Task) Finish() {
+// 	task.done = true
+// }
 
-func (task *Task) Finish() {
-	task.done = true
+// インタフェース
+// type Stringer interface {
+// 	String() string
+// }
+// 
+// func Print(stringer Stringer) {
+// 	fmt.Println(stringer.String())
+// }
+
+
+// 型の埋め込み
+type User struct {
+	FirstName string
+	LastName string
+}
+
+func (u *User) FullName() string {
+	fullname := fmt.Sprintf("%s %s", u.FirstName, u.LastName)
+	return fullname
+}
+
+func NewUser(firstName, lastName string) *User {
+	return &User {
+		FirstName: firstName,
+		LastName: lastName,
+	}
+}
+
+type Task struct {
+	ID int
+	Detail string
+	done bool
+	*User
+}
+
+func NewTask(id int, detail, firstName, lastName string) *Task {
+	task := &Task {
+		ID: id,
+		Detail: detail,
+		done: false,
+		User: NewUser(firstName, lastName),
+	}
+	return task
 }
 
 func main() {
@@ -67,8 +111,19 @@ func main() {
 	// fmt.Printf("%+v\n", task)
 	
 	// メソッド
-	task := NewTask(1, "buy the milk")
-	task.Finish()
-	fmt.Printf("%s", task)
-	
+	// task := NewTask(1, "buy the milk")
+	// task.Finish()
+	// fmt.Printf("%s", task)
+
+	// インタフェース
+	// task := NewTask(1, "buy the milk")
+	// Print(task)
+
+	// 型の埋め込み
+	task := NewTask(1, "buy the milk", "Jxck", "Daniel")
+	fmt.Println(task.FirstName)
+	fmt.Println(task.LastName)
+	fmt.Println(task.FullName())
+	fmt.Println(task.User)
+
 }
