@@ -6,7 +6,12 @@ import(
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"html/template"
+	"io/ioutil"
 )
+
+var t = template.Must(template.ParseFiles("index.html"))
 
 type Person struct {
 	ID int `json:"id"`
@@ -44,6 +49,27 @@ func PersonHandler(w http.ResponseWriter, r *http.Request)  {
 		
 		// レスポンスとして{201 CREATED}を送信
 		w.WriteHeader(http.StatusCreated)
+	} else if r.Method == "GET" {
+		id, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		
+		filename := fmt.Sprintf("%d.txt", id)
+		b, err := ioutil.ReadFile(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		
+		// personを生成
+		person := Person {
+			ID: id,
+			Name: string(b),
+		}
+		
+		// レスポンスにエンコーディングしたHTMLを書き込み
+		t.Execute(w, person)
+		
 	}
 }
 
